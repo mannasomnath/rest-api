@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
+const config = require("./config");
 
 const passportJWT = require("./middlewares/passportJWT")();
 const errorHandler = require("./middlewares/errorHandler");
@@ -25,7 +26,7 @@ app.use(cors());
 // app.use(limiter);
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/rest-api-node", {
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -40,6 +41,6 @@ app.use("/api/follow", passportJWT.authenticate(), followRoutes);
 
 app.use(errorHandler);
 
-app.listen(8000, () => {
+app.listen(config.port, () => {
     console.log("Listening");
 });
